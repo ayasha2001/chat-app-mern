@@ -25,7 +25,7 @@ const SideDrawer = () => {
   const {isOpen,onOpen,onClose} = useDisclosure()
   const toast = useToast();
 
-  const handleSearch= async()=>{
+  const handleSearch= async()=>{       //search funcctionality of the side drawer
     if(!search){
       toast({
         title: "Please Enter something in search",
@@ -46,8 +46,6 @@ const SideDrawer = () => {
       };
 
       const { data } = await axios.get(`/user?search=${search}`, config);
-
-
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -73,22 +71,28 @@ const SideDrawer = () => {
                Authorization: `Bearer ${user.token}`,
                 'content-type': "application/json"  ,
               },
-          body: JSON.stringify({ userId})
+          body: JSON.stringify({userId})
         };
+
       const { data } = fetch('/chats', options)
       .then((res)=>{
-        console.log(res)
+              
+        return res.json()
+      })
+      .then((data)=>{
+        console.log(data)
+        console.log("ye dekhna h")
+        if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+        setSelectedChat(data);
+        setLoadingChat(false);
+        onClose();    
+        
       })
       .catch(()=>
       {
         console.log("Error")
       })
 
-      console.log("bhj dia data")
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-      setSelectedChat(data);
-      setLoadingChat(false);
-      onClose();
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -101,7 +105,6 @@ const SideDrawer = () => {
     }
   };
   
-
 
   return (
     <>

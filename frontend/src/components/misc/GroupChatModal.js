@@ -95,15 +95,12 @@
         const { data } = fetch('/group', options)
         .then((res)=>{
           console.log(res)
+          setChats([data, ...chats]);
         })
         .catch(()=>
         {
           console.log("Error")
-        })
-  
-        console.log("data  bd")
-        console.log(data)
-        setChats([data, ...chats]);
+        })   
         onClose();
         toast({
           title: "New Group Chat Created!",

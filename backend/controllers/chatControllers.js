@@ -4,8 +4,10 @@ const User = require("../models/userModel");
 const Message = require("../models/messageModel")
 
 
-const accessChat = asyncHandler(async (req, res) => {
+const accessChat = asyncHandler(async (req, res) => {   // to display all the chats on the left or to create a chat
   const { userId } = req.body;
+  console.log(userId)
+  console.log("*********************s")
 
   if (!userId) {
     console.log("UserId param not sent with request");
@@ -24,7 +26,7 @@ const accessChat = asyncHandler(async (req, res) => {
 
   isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
-    select: "name pic email",
+    select: "name pic",
   });
 
   if (isChat.length > 0) {
@@ -50,7 +52,7 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 });
 
-const fetchChats = asyncHandler(async (req, res) => {
+const fetchChats = asyncHandler(async (req, res) => {      //to diplay all the chats of logged in user on the left sidedrawer
     try {
    
       Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
@@ -63,8 +65,7 @@ const fetchChats = asyncHandler(async (req, res) => {
             path: "latestMessage.sender",
             select: "name pic contact",
           });
-          console.log("guyjh")
-          console.log(results);
+         
           res.status(200).send(results);
         });
     } catch (error) {

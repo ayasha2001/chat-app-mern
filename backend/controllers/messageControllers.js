@@ -3,7 +3,7 @@ const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
 const Message = require("../models/messageModel")
 
-const sendMessage = asyncHandler(async (req, res) => {
+const sendMessage = asyncHandler(async (req, res) => {  // sending a message
     console.log(req.body)
     const { content, chatId } = req.body;
   
@@ -19,8 +19,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     };
     
     try {
-        var message = await Message.create(newMessage);
-        
+        var message = await Message.create(newMessage);    
         message = await message.populate("sender", "name pic");
         message = await message.populate("chat");
         message = await User.populate(message, {
@@ -38,7 +37,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   });
 
 
-  const allMessages = asyncHandler(async (req, res) => {
+  const allMessages = asyncHandler(async (req, res) => {          // fetching all the messages of one single chat
     try {
       console.log("mai chla mai chla")
       const messages = await Message.find({ chat: req.params.chatId })
